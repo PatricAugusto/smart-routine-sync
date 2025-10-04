@@ -1,15 +1,23 @@
+import { useState, useEffect } from 'react';
 import { Layout } from '@/components/Layout';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { useTheme } from '@/hooks/useTheme';
 import { storage } from '@/lib/storage';
-import { Download, Trash2, Moon, Sun } from 'lucide-react';
+import {
+  requestNotificationPermission,
+  getNotificationSettings,
+  setNotificationSettings,
+} from '@/lib/notifications';
+import { Download, Trash2, Palette, Bell } from 'lucide-react';
 import { toast } from 'sonner';
 
 const Settings = () => {
-  const { theme, toggleTheme } = useTheme();
+  const { mode, cycleTheme, getThemeLabel } = useTheme();
+  const [notificationsEnabled, setNotificationsEnabled] = useState(getNotificationSettings());
 
   const handleExport = () => {
     const tasks = storage.getTasks();
@@ -32,6 +40,23 @@ const Settings = () => {
     }
   };
 
+  const handleNotificationToggle = async (enabled: boolean) => {
+    if (enabled) {
+      const granted = await requestNotificationPermission();
+      if (granted) {
+        setNotificationsEnabled(true);
+        setNotificationSettings(true);
+        toast.success('Notificações ativadas!');
+      } else {
+        toast.error('Permissão de notificações negada');
+      }
+    } else {
+      setNotificationsEnabled(false);
+      setNotificationSettings(false);
+      toast.success('Notificações desativadas');
+    }
+  };
+
   const lastSync = storage.getLastSyncTime();
 
   return (
@@ -45,32 +70,61 @@ const Settings = () => {
         </div>
 
         <Card className="p-6 space-y-6">
-          <div>
-            <h2 className="text-lg font-semibold mb-4">Aparência</h2>
+          <div className="space-y-4">
+            <h2 className="text-lg font-semibold">Aparência</h2>
+            
             <div className="flex items-center justify-between">
               <div className="space-y-1">
-                <Label>Tema</Label>
+                <Label>Tema Visual</Label>
                 <p className="text-sm text-muted-foreground">
-                  Alternar entre modo claro e escuro
+                  Atual: {getThemeLabel()}
                 </p>
               </div>
               <Button
                 variant="outline"
-                onClick={toggleTheme}
+                onClick={cycleTheme}
                 className="gap-2"
               >
-                {theme === 'light' ? (
-                  <>
-                    <Moon className="h-4 w-4" />
-                    Escuro
-                  </>
-                ) : (
-                  <>
-                    <Sun className="h-4 w-4" />
-                    Claro
-                  </>
-                )}
+                <Palette className="h-4 w-4" />
+                Alternar Tema
               </Button>
+            </div>
+
+            <div className="p-4 bg-muted/50 rounded-lg space-y-2">
+              <p className="text-sm font-medium">Modos disponíveis:</p>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>• Claro: Interface clara o tempo todo</li>
+                <li>• Escuro: Interface escura o tempo todo</li>
+                <li>• Neutro: Tons neutros minimalistas</li>
+                <li>• Dinâmico: Muda automaticamente baseado no horário</li>
+              </ul>
+            </div>
+          </div>
+
+          <Separator />
+
+          <div className="space-y-4">
+            <h2 className="text-lg font-semibold">Notificações</h2>
+            
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <Label htmlFor="notifications">Lembretes de Tarefas</Label>
+                <p className="text-sm text-muted-foreground">
+                  Receba notificações para suas tarefas
+                </p>
+              </div>
+              <Switch
+                id="notifications"
+                checked={notificationsEnabled}
+                onCheckedChange={handleNotificationToggle}
+              />
+            </div>
+
+            <div className="p-4 bg-muted/50 rounded-lg">
+              <p className="text-sm text-muted-foreground">
+                <Bell className="h-4 w-4 inline mr-1" />
+                As notificações funcionam mesmo offline e ajudam você a não perder nenhuma tarefa importante.
+              </p>
             </div>
           </div>
 

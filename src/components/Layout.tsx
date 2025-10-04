@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Calendar, Settings, Moon, Sun, Wifi, WifiOff } from 'lucide-react';
+import { Home, Calendar, Settings, Palette, Wifi, WifiOff } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { motion } from 'framer-motion';
 import { useTheme } from '@/hooks/useTheme';
 import { useOnlineStatus } from '@/hooks/useOnlineStatus';
 import { cn } from '@/lib/utils';
@@ -11,7 +12,7 @@ interface LayoutProps {
 }
 
 export const Layout = ({ children }: LayoutProps) => {
-  const { theme, toggleTheme } = useTheme();
+  const { mode, cycleTheme, getThemeLabel } = useTheme();
   const isOnline = useOnlineStatus();
   const location = useLocation();
 
@@ -48,21 +49,33 @@ export const Layout = ({ children }: LayoutProps) => {
             <Button
               variant="ghost"
               size="icon"
-              onClick={toggleTheme}
-              className="rounded-full"
+              onClick={cycleTheme}
+              className="rounded-full group"
+              title={`Tema: ${getThemeLabel()}`}
             >
-              {theme === 'light' ? (
-                <Moon className="h-5 w-5" />
-              ) : (
-                <Sun className="h-5 w-5" />
-              )}
+              <motion.div
+                key={mode}
+                initial={{ rotate: -180, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <Palette className="h-5 w-5" />
+              </motion.div>
             </Button>
           </div>
         </div>
       </header>
 
       <main className="flex-1 container px-4 py-6">
-        {children}
+        <motion.div
+          key={location.pathname}
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2 }}
+        >
+          {children}
+        </motion.div>
       </main>
 
       <nav className="sticky bottom-0 z-50 w-full border-t bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60 md:hidden">

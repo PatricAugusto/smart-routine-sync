@@ -3,6 +3,7 @@ import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Button } from '@/components/ui/button';
 import { Pencil, Trash2, Flag } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 
 interface TaskCardProps {
@@ -20,16 +21,23 @@ export const TaskCard = ({ task, onToggle, onEdit, onDelete }: TaskCardProps) =>
   };
 
   return (
-    <Card className={cn(
-      "p-4 transition-all hover:shadow-card",
-      task.completed && "opacity-60"
-    )}>
-      <div className="flex items-start gap-3">
-        <Checkbox
-          checked={task.completed}
-          onCheckedChange={() => onToggle(task.id)}
-          className="mt-1"
-        />
+    <motion.div
+      layout
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.2 }}
+    >
+      <Card className={cn(
+        "p-4 transition-all hover:shadow-card",
+        task.completed && "opacity-60"
+      )}>
+        <div className="flex items-start gap-3">
+          <Checkbox
+            checked={task.completed}
+            onCheckedChange={() => onToggle(task.id)}
+            className="mt-1"
+          />
         
         <div className="flex-1 min-w-0">
           <div className="flex items-start justify-between gap-2">
@@ -69,6 +77,7 @@ export const TaskCard = ({ task, onToggle, onEdit, onDelete }: TaskCardProps) =>
           </div>
         </div>
       </div>
-    </Card>
+      </Card>
+    </motion.div>
   );
 };

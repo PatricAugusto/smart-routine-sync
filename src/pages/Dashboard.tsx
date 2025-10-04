@@ -2,17 +2,20 @@ import { useState } from 'react';
 import { Layout } from '@/components/Layout';
 import { TaskCard } from '@/components/TaskCard';
 import { TaskDialog } from '@/components/TaskDialog';
+import { PomodoroTimer } from '@/components/PomodoroTimer';
 import { Button } from '@/components/ui/button';
-import { Plus, CheckCircle2, Circle } from 'lucide-react';
+import { Plus, CheckCircle2, Circle, Timer } from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { useTasks } from '@/hooks/useTasks';
 import { Task } from '@/lib/storage';
-import { storage } from '@/lib/storage';
 
 const Dashboard = () => {
   const { tasks, isLoading, addTask, updateTask, deleteTask, toggleComplete } = useTasks();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [filter, setFilter] = useState<'all' | 'active' | 'completed'>('all');
+  const [showPomodoro, setShowPomodoro] = useState(false);
+  const [pomodoroTask, setPomodoroTask] = useState<Task | null>(null);
 
   const today = new Date().toISOString().split('T')[0];
   const todayTasks = tasks.filter(t => t.date === today);
@@ -47,9 +50,28 @@ const Dashboard = () => {
   const totalCount = todayTasks.length;
   const completionRate = totalCount > 0 ? Math.round((completedCount / totalCount) * 100) : 0;
 
+  const handleStartPomodoro = (task: Task) => {
+    setPomodoroTask(task);
+    setShowPomodoro(true);
+  };
+
   return (
     <Layout>
       <div className="max-w-4xl mx-auto space-y-6">
+        <AnimatePresence>
+          {showPomodoro && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+            >
+              <PomodoroTimer
+                taskTitle={pomodoroTask?.title}
+                onClose={() => setShowPomodoro(false)}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
         <div className="flex flex-col gap-4">
           <div>
             <h1 className="text-3xl font-bold mb-2">Hoje</h1>
@@ -106,22 +128,36 @@ const Dashboard = () => {
             </Button>
           </div>
 
-          <Button
-            onClick={() => {
-              setEditingTask(null);
-              setDialogOpen(true);
-            }}
-            className="gap-2"
-          >
-            <Plus className="h-4 w-4" />
-            Nova Tarefa
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={() => {
+                setPomodoroTask(null);
+                setShowPomodoro(!showPomodoro);
+              }}
+              className="gap-2"
+            >
+              <Timer className="h-4 w-4" />
+              <span className="hidden sm:inline">Pomodoro</span>
+            </Button>
+            <Button
+              onClick={() => {
+                setEditingTask(null);
+                setDialogOpen(true);
+              }}
+              className="gap-2"
+            >
+              <Plus className="h-4 w-4" />
+              Nova Tarefa
+            </Button>
+          </div>
         </div>
 
-        <div className="space-y-3">
-          {isLoading ? (
-            <p className="text-center text-muted-foreground py-8">Carregando...</p>
-          ) : filteredTasks.length === 0 ? (
+        <AnimatePresence mode="popLayout">
+          <div className="space-y-3">
+            {isLoading ? (
+              <p className="text-center text-muted-foreground py-8">Carregando...</p>
+            ) : filteredTasks.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-muted-foreground mb-4">
                 {filter === 'completed'
@@ -137,18 +173,19 @@ const Dashboard = () => {
                 </Button>
               )}
             </div>
-          ) : (
-            filteredTasks.map(task => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                onToggle={toggleComplete}
-                onEdit={handleEdit}
-                onDelete={handleDelete}
-              />
-            ))
-          )}
-        </div>
+            ) : (
+              filteredTasks.map(task => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  onToggle={toggleComplete}
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                />
+              ))
+            )}
+          </div>
+        </AnimatePresence>
       </div>
 
       <TaskDialog
