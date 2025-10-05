@@ -188,7 +188,7 @@ const Settings = () => {
               <p>Planner de Rotina Inteligente v1.0</p>
               <p>Progressive Web App com suporte offline</p>
               <p className="text-xs mt-4">
-                © 2025 - Criado com Lovable
+                © 2025 - Criado por Patric Augusto
               </p>
             </div>
           </div>

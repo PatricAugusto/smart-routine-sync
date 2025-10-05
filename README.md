@@ -1,73 +1,135 @@
-# Welcome to your Lovable project
+# 🧠 Smart Routine Sync
 
-## Project info
+## 🧭 Visão Geral do Projeto
+O **Smart Routine Sync** é uma solução moderna e eficiente projetada para **unificar e automatizar o gerenciamento de rotinas, tarefas e eventos** do usuário em um único painel.  
+Nosso objetivo é eliminar a fragmentação da produtividade, oferecendo **sincronização inteligente e recomendações baseadas em IA** para otimizar o tempo e a eficiência diária do usuário.
 
-**URL**: https://lovable.dev/projects/f7a0ffdb-97f5-454d-9d74-bddc3c7cb15b
+---
 
-## How can I edit this code?
+## 🎯 Proposta de Valor
 
-There are several ways of editing your application.
+- **Sincronização Unificada:** Conecte e gerencie agendas, listas de tarefas e lembretes de diversas fontes (Google Calendar, ToDoist, etc.).  
+- **Otimização Inteligente:** Algoritmos que sugerem o melhor momento para tarefas com base em seus hábitos e disponibilidade.  
+- **Experiência de Usuário Premium:** Interface limpa, rápida e acessível construída com tecnologias *state-of-the-art*.
 
-**Use Lovable**
+---
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/f7a0ffdb-97f5-454d-9d74-bddc3c7cb15b) and start prompting.
+## 🛠️ Stack Tecnológico e Arquitetura
+Este projeto utiliza uma **arquitetura moderna e escalável**, focada em performance e manutenção.
 
-Changes made via Lovable will be committed automatically to this repo.
+| Categoria | Tecnologia | Uso |
+|------------|-------------|-----|
+| **Frontend Principal** | React | Biblioteca de UI principal para uma experiência de usuário dinâmica. |
+| **Linguagem** | TypeScript | Garante código seguro, escalável e com melhor manutenibilidade. |
+| **Build & Tooling** | Vite | Empacotador e servidor de desenvolvimento ultrarrápido. |
+| **Design System** | shadcn-ui | Componentes de interface elegantes, acessíveis e reutilizáveis. |
+| **Estilização** | Tailwind CSS | Framework CSS utilitário para design e responsividade ágeis. |
+| **Back-end (Exemplo)** | Node.js / Express | API RESTful para manipulação de dados de rotina e sincronização. |
 
-**Use your preferred IDE**
+---
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## ⚙️ Guia de Desenvolvimento Local
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Pré-requisitos
+Você deve ter o **Node.js** (versão LTS recomendada) e o **npm** instalados.  
+O uso do **nvm (Node Version Manager)** é altamente encorajado.
 
-Follow these steps:
+### Configuração
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+1. **Clone o repositório:**
+   ```bash
+   git clone <YOUR_GIT_URL>
+   ```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+2. Acesse o diretório do projeto:
+   ```bash
+   cd smart-routine-sync
+   ```
 
-# Step 3: Install the necessary dependencies.
-npm i
+3. Instale as dependências:
+   ```bash
+   npm install
+   ```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+4. Inicie o servidor de desenvolvimento:
+   ```bash
+   npm run dev
+   ```
 
-**Edit a file directly in GitHub**
+O aplicativo estará acessível em http://localhost:5173
+ (a porta pode variar).
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+ ---
 
-**Use GitHub Codespaces**
+## 🧪 Testes e Qualidade de Código
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Para garantir a estabilidade e qualidade, o projeto inclui testes unitários e de integração.
 
-## What technologies are used for this project?
+### Rodar Testes Unitários:
+   ```bash
+   npm run test
+   ```
 
-This project is built with:
+### Análise de Código (Linting):
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+Utilizamos ESLint para manter um estilo de código consistente.
+   ```bash
+   npm run lint
+   ```
 
-## How can I deploy this project?
+## 🤝 Contribuições
 
-Simply open [Lovable](https://lovable.dev/projects/f7a0ffdb-97f5-454d-9d74-bddc3c7cb15b) and click on Share -> Publish.
+Sua contribuição é o que torna o Smart Routine Sync um projeto excelente.
+Encorajamos ativamente a comunidade a nos ajudar a evoluí-lo.
 
-## Can I connect a custom domain to my Lovable project?
+1. Faça um Fork do projeto.
 
-Yes, you can!
+2. Crie uma Branch para sua feature:
+    ```bash
+    git checkout -b feature/NomeDaFeature
+    ```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+3. Faça o Commit das suas alterações:
+    ```bash
+    git commit -m 'feat: Adiciona nova funcionalidade X'
+    ```
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+4. Envie (Push) para a Branch:
+    ```bash
+    git push origin feature/NomeDaFeature
+    ```
+
+5. Abra um Pull Request (PR) detalhado.
+
+💡 Recomendação: leia o CONTRIBUTING.md (se existir) para diretrizes detalhadas de estilo de código e processos de PR.
+
+---
+
+## 🚀 Implantação (Deployment)
+
+O projeto é configurado para Continuous Deployment (CD).
+
+### Configuração de Build
+
+Para gerar uma versão de produção estática (otimizada e minified):
+    ```bash
+    npm run build
+    ```
+
+O código pronto para ser servido estará disponível na pasta:
+    ```bash
+    /dist
+    ```
+
+#### Domínios Personalizados
+
+O projeto suporta domínios personalizados via configurações do provedor de hospedagem
+(e.g., Vercel, Netlify, Lovable, etc.).
+Consulte a documentação do seu provedor para a configuração exata.
+
+## 📄 Licença
+
+Este projeto é de código aberto e distribuído.
+Sinta-se à vontade para usar, modificar e compartilhar.
+
+Desenvolvido com 💡 e ☕ por Patric Santana
